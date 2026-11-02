@@ -2993,3 +2993,4 @@ body {
     height: 11px;
   }
 }
+.navbar.site-header.header-over-photo { background: linear-gradient(180deg, #081e32aa, #081e3255); }
