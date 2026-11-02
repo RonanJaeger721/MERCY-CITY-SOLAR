@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { business } from "@/lib/business";
-import { GlassNavbar, SiteFooter } from "@/components/ui";
+import { SiteHeader, SiteFooter } from "@/components/ui";
 import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
@@ -36,7 +36,7 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <GlassNavbar />
+        <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
         <script

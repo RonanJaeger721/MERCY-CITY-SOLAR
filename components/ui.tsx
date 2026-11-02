@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { ReactNode, PointerEvent } from "react";
 import {
@@ -115,14 +116,18 @@ const links = [
   ["How It Works", "/#how-it-works"],
   ["Contact", "/contact"],
 ];
-export function GlassNavbar() {
+export function SiteHeader() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false),
-    [hidden, setHidden] = useState(false);
+    [hidden, setHidden] = useState(false),
+    [scrolled, setScrolled] = useState(false);
   const nav = useRef<HTMLElement>(null);
   useEffect(() => {
     let previous = window.scrollY;
+    setScrolled(previous > 40);
     const onScroll = () => {
       const y = Math.max(0, window.scrollY);
+      setScrolled(y > 40);
       if (y !== previous)
         setHidden(
           y > window.innerHeight * 0.7 &&
@@ -145,11 +150,11 @@ export function GlassNavbar() {
   return (
     <header
       ref={nav}
-      className={`navbar ${hidden && !open ? "nav-hidden" : ""}`}
+      className={`navbar site-header ${pathname !== "/" || scrolled || open ? "header-solid" : "header-over-photo"} ${hidden && !open ? "nav-hidden" : ""}`}
       onFocus={() => setHidden(false)}
     >
       <Link
-        href="/"
+        href="/#main"
         className="brand"
         aria-label="Mercy City home"
         onClick={() => setOpen(false)}
@@ -171,7 +176,14 @@ export function GlassNavbar() {
         className={open ? "nav-links open" : "nav-links"}
       >
         {links.map(([label, href]) => (
-          <Link href={href} key={label} onClick={() => setOpen(false)}>
+          <Link
+            href={href}
+            key={label}
+            aria-current={
+              pathname === href && label !== "How It Works" ? "page" : undefined
+            }
+            onClick={() => setOpen(false)}
+          >
             {label}
           </Link>
         ))}
